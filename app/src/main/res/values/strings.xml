@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BlockBusters</string>
+    <string name="title_activity_block_buster_home">BlockBuster Home</string>
+    <string name="action_settings">Settings</string>
+</resources>
