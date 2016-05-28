@@ -1,14 +1,19 @@
 package com.udacity.learning.blockbusters.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
 import com.udacity.learning.blockbusters.R;
 
 public class MovieDetailActivity extends AppCompatActivity {
+
+    private CollapsingToolbarLayout collapsibleToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +31,12 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent recdIntent = getIntent();
+        String movieName = recdIntent.getStringExtra(Intent.EXTRA_TEXT);
+
+        collapsibleToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        collapsibleToolbar.setTitle(movieName);
+
     }
 }

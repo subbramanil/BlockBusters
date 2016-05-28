@@ -1,5 +1,6 @@
 package com.udacity.learning.blockbusters.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -55,7 +56,12 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        Log.d(TAG, "onItemClick: Selected Movie is: " + moviesNamesAdapter.getItem(position));
+        Movie selectedMovie = moviesNamesAdapter.getItem(position);
+        Log.d(TAG, "onItemClick: Selected Movie is: " + selectedMovie);
+
+        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, selectedMovie.getMovieTitle());
+        startActivity(intent);
     }
 
 }
