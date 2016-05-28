@@ -93,4 +93,23 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_sort">Sorting Order</string>
+    <string name="title_activity_block_buster_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string-array name="pref_sort_order_titles">
+        <item>Popular Movies</item>
+        <item>User Rating</item>
+    </string-array>
+    <string-array name="pref_sort_order_values">
+        <item>popular</item>
+        <item>top_rated</item>
+    </string-array>
+
+    <string name="sort_pref_key">sort order</string>
+    <string name="pref_title_sort_order">Sort Movies by</string>
+    <string name="default_sort_value">popular</string>
 </resources>

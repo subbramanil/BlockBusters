@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.udacity.learning.blockbusters">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +24,14 @@
             android:label="@string/title_activity_movie_detail"
             android:parentActivityName=".activities.BlockBusterHomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udacity.learning.blockbusters.activities.BlockBusterHomeActivity" />
+        </activity>
+        <activity
+            android:name=".activities.BlockBusterSettingsActivity"
+            android:label="@string/title_activity_block_buster_settings"
+            android:parentActivityName=".activities.BlockBusterHomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.udacity.learning.blockbusters.activities.BlockBusterHomeActivity" />
