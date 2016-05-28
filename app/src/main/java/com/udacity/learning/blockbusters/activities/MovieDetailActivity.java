@@ -3,18 +3,18 @@ package com.udacity.learning.blockbusters.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.model.Movie;
+
+import java.text.MessageFormat;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -30,14 +30,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent recdIntent = getIntent();
@@ -46,11 +38,15 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         collapsibleToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         ImageView moviePoster = (ImageView) findViewById(R.id.movie_poster_bground);
+        TextView movieReleaseDate = (TextView) findViewById(R.id.movie_releaseDate);
         TextView movieOverView = (TextView) findViewById(R.id.movie_overview);
+        RatingBar movieRating = (RatingBar) findViewById(R.id.movie_rating);
 
         collapsibleToolbar.setTitle(movie.getTitle());
         Picasso.with(this).load(baseURL + movie.getPosterPath()).into(moviePoster);
         movieOverView.setText(movie.getOverview());
+        movieReleaseDate.setText(MessageFormat.format("Release Date: {0}", movie.getReleaseDate()));
+        movieRating.setRating((float) movie.getVoteAverage());
 
     }
 }
