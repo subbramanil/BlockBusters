@@ -1,12 +1,15 @@
 package com.udacity.learning.blockbusters.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("poster_path")
     @Expose
@@ -50,6 +53,36 @@ public class Movie {
     @SerializedName("vote_average")
     @Expose
     private double voteAverage;
+
+    public static final Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    public Movie(Parcel parcel) {
+
+        this.title = parcel.readString();
+        this.originalTitle = parcel.readString();
+        this.originalLanguage = parcel.readString();
+        this.backdropPath = parcel.readString();
+        this.overview = parcel.readString();
+        this.posterPath = parcel.readString();
+        this.releaseDate = parcel.readString();
+        this.adult = parcel.readByte() != 0;
+        this.video = parcel.readByte() != 0;
+        this.id = parcel.readLong();
+        this.voteCount = parcel.readLong();
+        this.popularity = parcel.readDouble();
+        this.voteAverage = parcel.readDouble();
+        parcel.readList(this.genreIds, Long.class.getClassLoader());
+    }
 
     /**
      * @return The posterPath
@@ -317,4 +350,26 @@ public class Movie {
         return this;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.title);
+        parcel.writeString(this.originalTitle);
+        parcel.writeString(this.originalLanguage);
+        parcel.writeString(this.backdropPath);
+        parcel.writeString(this.overview);
+        parcel.writeString(this.posterPath);
+        parcel.writeString(this.releaseDate);
+        parcel.writeByte((byte) (this.adult ? 1 : 0));
+        parcel.writeByte((byte) (this.video ? 1 : 0));
+        parcel.writeLong(this.id);
+        parcel.writeLong(this.voteCount);
+        parcel.writeDouble(this.popularity);
+        parcel.writeDouble(this.voteAverage);
+        parcel.writeList(this.genreIds);
+    }
 }

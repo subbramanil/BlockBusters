@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MovieRestService {
 
-    public static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
+    public static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static final String TAG = MovieRestService.class.getSimpleName();
     private static MovieRestService INSTANCE;
     Gson gson;
@@ -69,20 +69,19 @@ public class MovieRestService {
     /**
      * Method to make the Rest API call to the TMDB API service and the list of movies
      *
-     * @param apiKey    : API KEY for TMDB
      * @param sortOrder : Movie Sort order {"Most Popular", "User Rating"}
+     * @param apiKey    : API KEY for TMDB
      */
-    public MoviesContainer getMoviesList(String apiKey, String sortOrder) {
+    public MoviesContainer getMoviesList(String sortOrder, String apiKey) {
         Log.d(TAG, "getMoviesList: Sort order: " + sortOrder);
 
         MoviesContainer moviesContainer = null;
-        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(apiKey);
+        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(sortOrder, apiKey);
 
         try {
             Response<MoviesContainer> response = call.execute();
             if (response != null) {
                 moviesContainer = response.body();
-                Log.d(TAG, "getMoviesList: Movies: " + moviesContainer.getMovies().size());
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class BlockBusterHomeActivityFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = BlockBusterHomeActivityFragment.class.getSimpleName();
+    private static final String SELECTED_MOVIE = "selected_movie";
     private GridView moviesGrid;
     private MoviesAdapter moviesAdapter;
     private ArrayList<Movie> mListOfMovies;
@@ -98,7 +99,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         Log.d(TAG, "onItemClick: Selected Movie is: " + selectedMovie);
 
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT, selectedMovie.getTitle());
+        intent.putExtra(SELECTED_MOVIE, selectedMovie);
         startActivity(intent);
     }
 
@@ -127,14 +128,12 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
         @Override
         protected MoviesContainer doInBackground(String... params) {
-
             // Verify size of params for the sort order
             if (params.length == 0) {
                 return null;
             }
-
             try {
-                movieContainer = movieRestService.getMoviesList(BuildConfig.TMDB_API_KEY, params[0]);
+                movieContainer = movieRestService.getMoviesList(params[0], BuildConfig.TMDB_API_KEY);
                 return movieContainer;
             } catch (Exception e) {
                 Log.e(TAG, "Error ", e);
@@ -145,12 +144,12 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         @Override
         protected void onPostExecute(MoviesContainer movieContainer) {
             Log.d(TAG, "onPostExecute: Movies: " + movieContainer);
+            moviesAdapter.clear();
             if (movieContainer != null) {
                 moviesAdapter.addAll(movieContainer.getMovies());
             }
         }
     }
-
 
     //endregion
 }
