@@ -13,7 +13,7 @@ import retrofit2.http.Query;
  */
 public interface MovieAPIInterface {
     @GET("movie/{sort}")
-    Call<MoviesContainer> fetchMoviesList(@Path("sort") String sortOrder, @Query("api_key") String key);
+    Call<MoviesContainer> fetchMoviesList(@Path("sort") String sortOrder, @Query("api_key") String key, @Query("page") String pageNumber);
 }
 
 /*public interface ChaturaAPIService {

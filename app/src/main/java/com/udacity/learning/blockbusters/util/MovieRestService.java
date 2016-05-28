@@ -69,14 +69,15 @@ public class MovieRestService {
     /**
      * Method to make the Rest API call to the TMDB API service and the list of movies
      *
-     * @param sortOrder : Movie Sort order {"Most Popular", "User Rating"}
-     * @param apiKey    : API KEY for TMDB
+     * @param sortOrder  : Movie Sort order {"Most Popular", "User Rating"}
+     * @param apiKey     : API KEY for TMDB
+     * @param pageNumber : Page number
      */
-    public MoviesContainer getMoviesList(String sortOrder, String apiKey) {
+    public MoviesContainer getMoviesList(String sortOrder, String apiKey, String pageNumber) {
         Log.d(TAG, "getMoviesList: Sort order: " + sortOrder);
 
         MoviesContainer moviesContainer = null;
-        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(sortOrder, apiKey);
+        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(sortOrder, apiKey, pageNumber);
 
         try {
             Response<MoviesContainer> response = call.execute();

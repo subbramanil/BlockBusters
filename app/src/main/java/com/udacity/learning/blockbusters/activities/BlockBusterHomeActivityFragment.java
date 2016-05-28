@@ -22,6 +22,7 @@ import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.adapters.MoviesAdapter;
 import com.udacity.learning.blockbusters.model.Movie;
 import com.udacity.learning.blockbusters.model.MoviesContainer;
+import com.udacity.learning.blockbusters.util.EndlessScrollListener;
 import com.udacity.learning.blockbusters.util.MovieRestService;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
     private MoviesAdapter moviesAdapter;
     private ArrayList<Movie> mListOfMovies;
     private MovieRestService movieRestService;
+    private String prevSortOrder;
 
     public BlockBusterHomeActivityFragment() {
     }
@@ -63,13 +65,32 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         moviesAdapter = new MoviesAdapter(getContext(), mListOfMovies);
         moviesGrid.setAdapter(moviesAdapter);
         moviesGrid.setOnItemClickListener(this);
+
+        moviesGrid.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                Log.d(TAG, "onLoadMore: Load Move movies from page: " + page);
+                Log.d(TAG, "onLoadMore: Total Movies so far: " + totalItemsCount);
+                populateMovies(prevSortOrder, page);
+                return true;
+            }
+        });
         return fragView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        populateMovies();
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        String sortOrder = preferences.getString(getString(R.string.sort_pref_key), "Popular movies");
+        if (prevSortOrder == null || !sortOrder.equals(prevSortOrder)) {
+            Log.d(TAG, "onStart: prevSortOrder: " + prevSortOrder + " Change in Sorting Order: " + !sortOrder.equals(prevSortOrder));
+            prevSortOrder = sortOrder;
+            moviesAdapter.clear();
+            Log.d(TAG, "onStart: Clearing the movies list");
+            populateMovies(sortOrder, 1);
+        }
     }
 
     @Override
@@ -107,14 +128,10 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
     //region Local Methods
 
-    private void populateMovies() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
-        String sortOrder = preferences.getString(getString(R.string.sort_pref_key), "Popular movies");
+    private void populateMovies(String sortOrder, int pageNumber) {
         Log.d(TAG, "populateMovies: Sorting order: " + sortOrder);
-
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
-        fetchMoviesTask.execute(sortOrder);
+        fetchMoviesTask.execute(sortOrder, String.valueOf(pageNumber));
     }
 
     //endregion
@@ -133,7 +150,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
                 return null;
             }
             try {
-                movieContainer = movieRestService.getMoviesList(params[0], BuildConfig.TMDB_API_KEY);
+                movieContainer = movieRestService.getMoviesList(params[0], BuildConfig.TMDB_API_KEY, params[1]);
                 return movieContainer;
             } catch (Exception e) {
                 Log.e(TAG, "Error ", e);
@@ -144,7 +161,6 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         @Override
         protected void onPostExecute(MoviesContainer movieContainer) {
             Log.d(TAG, "onPostExecute: Movies: " + movieContainer);
-            moviesAdapter.clear();
             if (movieContainer != null) {
                 moviesAdapter.addAll(movieContainer.getMovies());
             }
