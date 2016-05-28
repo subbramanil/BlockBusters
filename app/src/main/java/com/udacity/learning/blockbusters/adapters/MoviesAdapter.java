@@ -49,8 +49,8 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             viewHolder = (MovieViewHolder) convertView.getTag();
         }
 
-        viewHolder.movieTitle.setText(movieItem.getMovieTitle());
-        viewHolder.movieRatingBar.setRating((float) movieItem.getMovieRating());
+        viewHolder.movieTitle.setText(movieItem.getTitle());
+        viewHolder.movieRatingBar.setRating((float) movieItem.getVoteAverage());
         viewHolder.movieImageView.setImageResource(R.drawable.poster);
 
         return convertView;
