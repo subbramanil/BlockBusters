@@ -3,7 +3,8 @@ package com.udacity.learning.blockbusters.util;
 import android.widget.AbsListView;
 
 /**
- * Created by Subbu on 5/28/16.
+ * Referred from Codepath Github Android Guide
+ * https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews
  */
 
 

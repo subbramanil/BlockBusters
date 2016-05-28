@@ -16,17 +16,3 @@ public interface MovieAPIInterface {
     Call<MoviesContainer> fetchMoviesList(@Path("sort") String sortOrder, @Query("api_key") String key, @Query("page") String pageNumber);
 }
 
-/*public interface ChaturaAPIService {
-
-    @POST("/users/registerUser")
-    Call<UserRegRequestInfo> registerNewUser(@Body UserRegRequestInfo userRegRequestInfo);
-
-    @POST("/users/authUser")
-    Call<UserAuthRequest> authenticateUser(@Body UserAuthRequest authRequest);
-
-    @POST("/user/{userID}/addNewLight")
-    Call<ChaturaResponse> addNewLight(@Path("userID") String userID, @Body Light newLight);
-
-    @GET("/user/{userID}/fetchUserDashboardDetails")
-    Call<UserInfo> fetchUserDashboardDetails(@Path("userID") String userID);
-}*/

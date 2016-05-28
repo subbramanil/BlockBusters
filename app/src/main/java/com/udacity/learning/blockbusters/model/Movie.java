@@ -9,6 +9,11 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class generated using online tool from: http://www.jsonschema2pojo.org
+ * Given a JSON string, this tool will help generate the Java class with chosen JSON Serializer
+ */
+
 public class Movie implements Parcelable {
 
     @SerializedName("poster_path")

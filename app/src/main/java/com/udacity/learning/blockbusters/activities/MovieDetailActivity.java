@@ -43,6 +43,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         RatingBar movieRating = (RatingBar) findViewById(R.id.movie_rating);
 
         collapsibleToolbar.setTitle(movie.getTitle());
+        // Load Poster using Picasso library
         Picasso.with(this).load(baseURL + movie.getPosterPath()).into(moviePoster);
         movieOverView.setText(movie.getOverview());
         movieReleaseDate.setText(MessageFormat.format("Release Date: {0}", movie.getReleaseDate()));

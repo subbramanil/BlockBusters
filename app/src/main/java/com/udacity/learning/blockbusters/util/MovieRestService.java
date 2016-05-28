@@ -41,12 +41,16 @@ public class MovieRestService {
         return INSTANCE;
     }
 
+    /**
+     * Method to create Retrofit instance & initialize
+     *
+     * @return Retrofit instance
+     */
     private Retrofit createRestService() {
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
                 .create();
-
 
         //logging
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -80,6 +84,7 @@ public class MovieRestService {
         Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(sortOrder, apiKey, pageNumber);
 
         try {
+            // Synchronous API Call
             Response<MoviesContainer> response = call.execute();
             if (response != null) {
                 moviesContainer = response.body();

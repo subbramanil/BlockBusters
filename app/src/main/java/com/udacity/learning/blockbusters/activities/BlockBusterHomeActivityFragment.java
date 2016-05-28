@@ -28,15 +28,13 @@ import com.udacity.learning.blockbusters.util.MovieRestService;
 import java.util.ArrayList;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A placeholder fragment containing the list of movies presented in GridView
  */
 public class BlockBusterHomeActivityFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = BlockBusterHomeActivityFragment.class.getSimpleName();
     private static final String SELECTED_MOVIE = "selected_movie";
-    private GridView moviesGrid;
     private MoviesAdapter moviesAdapter;
-    private ArrayList<Movie> mListOfMovies;
     private MovieRestService movieRestService;
     private String prevSortOrder;
 
@@ -44,7 +42,6 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
     }
 
     //region Lifecycle methods
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,13 +56,15 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
         setHasOptionsMenu(true);
 
-        moviesGrid = (GridView) fragView.findViewById(R.id.moviesGrid);
-        mListOfMovies = new ArrayList<>();
+        GridView moviesGrid = (GridView) fragView.findViewById(R.id.moviesGrid);
+        ArrayList<Movie> mListOfMovies = new ArrayList<>();
 
         moviesAdapter = new MoviesAdapter(getContext(), mListOfMovies);
         moviesGrid.setAdapter(moviesAdapter);
         moviesGrid.setOnItemClickListener(this);
 
+
+        // Referred from https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews
         moviesGrid.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
@@ -88,7 +87,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
             Log.d(TAG, "onStart: prevSortOrder: " + prevSortOrder + " Change in Sorting Order: " + !sortOrder.equals(prevSortOrder));
             prevSortOrder = sortOrder;
             moviesAdapter.clear();
-            Log.d(TAG, "onStart: Clearing the movies list");
+            Log.d(TAG, "onStart: Clearing the movies list & update views");
             populateMovies(sortOrder, 1);
         }
     }
@@ -139,6 +138,9 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
     //region AsyncTask
 
+    /**
+     * Asycntask to fetch the list of movies from tmdb api
+     */
     public class FetchMoviesTask extends AsyncTask<String, Void, MoviesContainer> {
 
         private MoviesContainer movieContainer;
