@@ -1,8 +1,6 @@
 package com.udacity.learning.blockbusters.util;
 
-import com.udacity.learning.blockbusters.model.Movie;
-
-import java.util.ArrayList;
+import com.udacity.learning.blockbusters.model.MoviesContainer;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,7 +12,7 @@ import retrofit2.http.Query;
  */
 public interface MovieAPIInterface {
     @GET("popular")
-    Call<ArrayList<Movie>> fetchMoviesList(@Query("api_key") String key);
+    Call<MoviesContainer> fetchMoviesList(@Query("api_key") String key);
 }
 
 /*public interface ChaturaAPIService {

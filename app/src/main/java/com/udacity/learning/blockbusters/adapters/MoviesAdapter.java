@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.model.Movie;
 
@@ -21,11 +22,14 @@ import java.util.ArrayList;
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
     private static final String TAG = MoviesAdapter.class.getSimpleName();
+    private static final String baseURL = "http://image.tmdb.org/t/p/w500";
+    private final Context context;
 
     //region Constructors
 
     public MoviesAdapter(Context context, ArrayList<Movie> movies) {
         super(context, 0, movies);
+        this.context = context;
     }
 
     //endregion
@@ -51,7 +55,8 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
 
         viewHolder.movieTitle.setText(movieItem.getTitle());
         viewHolder.movieRatingBar.setRating((float) movieItem.getVoteAverage());
-        viewHolder.movieImageView.setImageResource(R.drawable.poster);
+        //load movie poster using Picasso Image library
+        Picasso.with(context).load(baseURL + movieItem.getPosterPath()).into(viewHolder.movieImageView);
 
         return convertView;
     }

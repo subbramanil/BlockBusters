@@ -21,6 +21,7 @@ import com.udacity.learning.blockbusters.BuildConfig;
 import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.adapters.MoviesAdapter;
 import com.udacity.learning.blockbusters.model.Movie;
+import com.udacity.learning.blockbusters.model.MoviesContainer;
 import com.udacity.learning.blockbusters.util.MovieRestService;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
     private static final String TAG = BlockBusterHomeActivityFragment.class.getSimpleName();
     private GridView moviesGrid;
-    private MoviesAdapter moviesNamesAdapter;
+    private MoviesAdapter moviesAdapter;
     private ArrayList<Movie> mListOfMovies;
     private MovieRestService movieRestService;
 
@@ -58,8 +59,8 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         moviesGrid = (GridView) fragView.findViewById(R.id.moviesGrid);
         mListOfMovies = new ArrayList<>();
 
-        moviesNamesAdapter = new MoviesAdapter(getContext(), mListOfMovies);
-        moviesGrid.setAdapter(moviesNamesAdapter);
+        moviesAdapter = new MoviesAdapter(getContext(), mListOfMovies);
+        moviesGrid.setAdapter(moviesAdapter);
         moviesGrid.setOnItemClickListener(this);
         return fragView;
     }
@@ -93,7 +94,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
     //region Event listeners
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        Movie selectedMovie = moviesNamesAdapter.getItem(position);
+        Movie selectedMovie = moviesAdapter.getItem(position);
         Log.d(TAG, "onItemClick: Selected Movie is: " + selectedMovie);
 
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
@@ -111,13 +112,6 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         String sortOrder = preferences.getString(getString(R.string.sort_pref_key), "Popular movies");
         Log.d(TAG, "populateMovies: Sorting order: " + sortOrder);
 
-        for (int i = 0; i < 5; i++) {
-            Movie movie = new Movie();
-            movie.setTitle("Movie :" + i);
-            movie.setVoteAverage(i);
-            mListOfMovies.add(movie);
-        }
-
         FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
         fetchMoviesTask.execute(sortOrder);
     }
@@ -127,10 +121,12 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
     //region AsyncTask
 
-    public class FetchMoviesTask extends AsyncTask<String, Void, String[]> {
+    public class FetchMoviesTask extends AsyncTask<String, Void, MoviesContainer> {
+
+        private MoviesContainer movieContainer;
 
         @Override
-        protected String[] doInBackground(String... params) {
+        protected MoviesContainer doInBackground(String... params) {
 
             // Verify size of params for the sort order
             if (params.length == 0) {
@@ -138,20 +134,20 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
             }
 
             try {
-                movieRestService.getMoviesList(BuildConfig.TMDB_API_KEY, params[0]);
+                movieContainer = movieRestService.getMoviesList(BuildConfig.TMDB_API_KEY, params[0]);
+                return movieContainer;
             } catch (Exception e) {
                 Log.e(TAG, "Error ", e);
                 return null;
-            } finally {
-
             }
-
-            return null;
         }
 
         @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
+        protected void onPostExecute(MoviesContainer movieContainer) {
+            Log.d(TAG, "onPostExecute: Movies: " + movieContainer);
+            if (movieContainer != null) {
+                moviesAdapter.addAll(movieContainer.getMovies());
+            }
         }
     }
 

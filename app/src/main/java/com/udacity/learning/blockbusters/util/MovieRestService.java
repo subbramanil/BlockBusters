@@ -5,15 +5,13 @@ import android.util.Log;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.udacity.learning.blockbusters.model.Movie;
+import com.udacity.learning.blockbusters.model.MoviesContainer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -74,24 +72,22 @@ public class MovieRestService {
      * @param apiKey    : API KEY for TMDB
      * @param sortOrder : Movie Sort order {"Most Popular", "User Rating"}
      */
-    public void getMoviesList(String apiKey, String sortOrder) {
+    public MoviesContainer getMoviesList(String apiKey, String sortOrder) {
         Log.d(TAG, "getMoviesList: Sort order: " + sortOrder);
-        Call<ArrayList<Movie>> call = movieAPIInterface.fetchMoviesList(apiKey);
-        call.enqueue(new Callback<ArrayList<Movie>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Movie>> call, Response<ArrayList<Movie>> response) {
-                int statusCode = response.code();
-                Log.d(TAG, "onResponse: ResponseCode: " + statusCode);
-                List<Movie> movies = response.body();
-                Log.d(TAG, "onResponse: Movies: " + movies);
+
+        MoviesContainer moviesContainer = null;
+        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(apiKey);
+
+        try {
+            Response<MoviesContainer> response = call.execute();
+            if (response != null) {
+                moviesContainer = response.body();
+                Log.d(TAG, "getMoviesList: Movies: " + moviesContainer.getMovies().size());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onFailure(Call<ArrayList<Movie>> call, Throwable t) {
-
-            }
-        });
-
-        Log.d(TAG, "getMoviesList: Async call done");
+        return moviesContainer;
     }
 }
