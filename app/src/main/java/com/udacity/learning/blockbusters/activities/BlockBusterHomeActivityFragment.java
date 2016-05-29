@@ -82,7 +82,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         super.onStart();
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
-        String sortOrder = preferences.getString(getString(R.string.sort_pref_key), "Popular movies");
+        String sortOrder = preferences.getString(getString(R.string.sort_pref_key), getString(R.string.default_sort_value));
         if (prevSortOrder == null || !sortOrder.equals(prevSortOrder)) {
             Log.d(TAG, "onStart: prevSortOrder: " + prevSortOrder + " Change in Sorting Order: " + !sortOrder.equals(prevSortOrder));
             prevSortOrder = sortOrder;
