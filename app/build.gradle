@@ -8,8 +8,8 @@ android {
         applicationId "com.udacity.learning.blockbusters"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         buildConfigField "String", "TMDB_API_KEY", "\"11c530da3a05ed9e5b5eb6163a05e977\""
     }
     buildTypes {
