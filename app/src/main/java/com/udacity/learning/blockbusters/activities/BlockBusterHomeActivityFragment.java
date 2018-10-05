@@ -39,9 +39,6 @@ public class BlockBusterHomeActivityFragment
     private MoviesAdapter moviesAdapter;
     private String prevSortOrder;
 
-    public BlockBusterHomeActivityFragment() {
-    }
-
     //region Lifecycle methods
 
     @Override

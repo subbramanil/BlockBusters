@@ -40,19 +40,20 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        MovieViewHolder viewHolder;
         Movie movieItem = getItem(position);
 
-        MovieViewHolder viewHolder;
+        View movieHolderView = convertView;
 
-        if (convertView == null) {
+        if (movieHolderView == null) {
             viewHolder = new MovieViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
-            viewHolder.movieTitle = convertView.findViewById(R.id.movie_name_text_view);
-            viewHolder.movieImageView = convertView.findViewById(R.id.movie_poster_image_view);
-            viewHolder.movieRatingBar = convertView.findViewById(R.id.movie_rating_bar);
-            convertView.setTag(viewHolder);
+            movieHolderView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
+            viewHolder.movieTitle = movieHolderView.findViewById(R.id.movie_name_text_view);
+            viewHolder.movieImageView = movieHolderView.findViewById(R.id.movie_poster_image_view);
+            viewHolder.movieRatingBar = movieHolderView.findViewById(R.id.movie_rating_bar);
+            movieHolderView.setTag(viewHolder);
         } else {
-            viewHolder = (MovieViewHolder) convertView.getTag();
+            viewHolder = (MovieViewHolder) movieHolderView.getTag();
         }
 
         viewHolder.movieTitle.setText(Objects.requireNonNull(movieItem).getTitle());
@@ -60,7 +61,7 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         //load movie poster using Picasso Image library
         Picasso.with(context).load(baseURL + movieItem.getPosterPath()).into(viewHolder.movieImageView);
 
-        return convertView;
+        return movieHolderView;
     }
 
     //endregion
@@ -69,9 +70,9 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     //region Classes & Interfaces declaration
 
     private static class MovieViewHolder {
-        TextView movieTitle;
-        RatingBar movieRatingBar;
-        ImageView movieImageView;
+        private TextView movieTitle;
+        private RatingBar movieRatingBar;
+        private ImageView movieImageView;
     }
 
     //endregion

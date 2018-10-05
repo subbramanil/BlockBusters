@@ -30,7 +30,6 @@ public class MovieRestService {
 
     private MovieRestService() {
         retrofit = createRestService();
-        Gson gson = new Gson();
     }
 
     public static MovieRestService getINSTANCE() {
