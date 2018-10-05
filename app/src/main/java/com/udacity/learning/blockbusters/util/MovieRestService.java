@@ -22,16 +22,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MovieRestService {
 
-    public static final String BASE_URL = "http://api.themoviedb.org/3/";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static final String TAG = MovieRestService.class.getSimpleName();
     private static MovieRestService INSTANCE;
-    Gson gson;
-    Retrofit retrofit;
-    MovieAPIInterface movieAPIInterface;
+    private Retrofit retrofit;
+    private MovieAPIInterface movieAPIInterface;
 
     private MovieRestService() {
         retrofit = createRestService();
-        gson = new Gson();
+        Gson gson = new Gson();
     }
 
     public static MovieRestService getINSTANCE() {

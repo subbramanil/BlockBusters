@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,17 +25,18 @@ import com.udacity.learning.blockbusters.model.MoviesContainer;
 import com.udacity.learning.blockbusters.util.EndlessScrollListener;
 import com.udacity.learning.blockbusters.util.MovieRestService;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing the list of movies presented in GridView
  */
-public class BlockBusterHomeActivityFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class BlockBusterHomeActivityFragment
+        extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = BlockBusterHomeActivityFragment.class.getSimpleName();
     private static final String SELECTED_MOVIE = "selected_movie";
     private MoviesAdapter moviesAdapter;
-    private MovieRestService movieRestService;
     private String prevSortOrder;
 
     public BlockBusterHomeActivityFragment() {
@@ -44,19 +45,13 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
     //region Lifecycle methods
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        movieRestService = MovieRestService.getINSTANCE();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragView = inflater.inflate(R.layout.fragment_block_buster_home, container, false);
 
         setHasOptionsMenu(true);
 
-        GridView moviesGrid = (GridView) fragView.findViewById(R.id.moviesGrid);
+        GridView moviesGrid = fragView.findViewById(R.id.moviesGrid);
         ArrayList<Movie> mListOfMovies = new ArrayList<>();
 
         moviesAdapter = new MoviesAdapter(getContext(), mListOfMovies);
@@ -83,7 +78,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
         String sortOrder = preferences.getString(getString(R.string.sort_pref_key), getString(R.string.default_sort_value));
-        if (prevSortOrder == null || !sortOrder.equals(prevSortOrder)) {
+        if (!sortOrder.equals(prevSortOrder)) {
             Log.d(TAG, "onStart: prevSortOrder: " + prevSortOrder + " Change in Sorting Order: " + !sortOrder.equals(prevSortOrder));
             prevSortOrder = sortOrder;
             moviesAdapter.clear();
@@ -129,7 +124,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
 
     private void populateMovies(String sortOrder, int pageNumber) {
         Log.d(TAG, "populateMovies: Sorting order: " + sortOrder);
-        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+        FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
         fetchMoviesTask.execute(sortOrder, String.valueOf(pageNumber));
     }
 
@@ -139,11 +134,23 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
     //region AsyncTask
 
     /**
-     * Asycntask to fetch the list of movies from tmdb api
+     * Async Task to fetch the list of movies from tmdb api
      */
-    public class FetchMoviesTask extends AsyncTask<String, Void, MoviesContainer> {
+    static class FetchMoviesTask extends AsyncTask<String, Void, MoviesContainer> {
 
         private MoviesContainer movieContainer;
+        private final WeakReference<BlockBusterHomeActivityFragment> fragmentWeakReference;
+        private MovieRestService movieRestService;
+
+        FetchMoviesTask(BlockBusterHomeActivityFragment fragment) {
+            this.fragmentWeakReference = new WeakReference<>(fragment);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            movieRestService = MovieRestService.getINSTANCE();
+        }
 
         @Override
         protected MoviesContainer doInBackground(String... params) {
@@ -164,7 +171,7 @@ public class BlockBusterHomeActivityFragment extends Fragment implements Adapter
         protected void onPostExecute(MoviesContainer movieContainer) {
             Log.d(TAG, "onPostExecute: Movies: " + movieContainer);
             if (movieContainer != null) {
-                moviesAdapter.addAll(movieContainer.getMovies());
+                fragmentWeakReference.get().moviesAdapter.addAll(movieContainer.getMovies());
             }
         }
     }
