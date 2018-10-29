@@ -48,6 +48,5 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieOverView.setText(movie.getOverview());
         movieReleaseDate.setText(MessageFormat.format("Release Date: {0}", movie.getReleaseDate()));
         movieRating.setRating((float) movie.getVoteAverage());
-
     }
 }

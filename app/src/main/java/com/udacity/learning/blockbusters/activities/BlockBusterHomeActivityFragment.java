@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.udacity.learning.blockbusters.AppComponent;
+import com.udacity.learning.blockbusters.BlockbustersApp;
 import com.udacity.learning.blockbusters.BuildConfig;
 import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.adapters.MoviesAdapter;
@@ -28,6 +31,8 @@ import com.udacity.learning.blockbusters.util.MovieRestService;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
  * A placeholder fragment containing the list of movies presented in GridView
  */
@@ -36,10 +41,21 @@ public class BlockBusterHomeActivityFragment
 
     private static final String TAG = BlockBusterHomeActivityFragment.class.getSimpleName();
     private static final String SELECTED_MOVIE = "selected_movie";
-    private MoviesAdapter moviesAdapter;
+
+    @Inject MoviesAdapter moviesAdapter;
+    @Inject SharedPreferences preferences;
     private String prevSortOrder;
 
     //region Lifecycle methods
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AppComponent appComponent = ((BlockbustersApp) getActivity().getApplication()).getAppComponent();
+        appComponent.inject(this);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -49,12 +65,9 @@ public class BlockBusterHomeActivityFragment
         setHasOptionsMenu(true);
 
         GridView moviesGrid = fragView.findViewById(R.id.moviesGrid);
-        ArrayList<Movie> mListOfMovies = new ArrayList<>();
 
-        moviesAdapter = new MoviesAdapter(getContext(), mListOfMovies);
         moviesGrid.setAdapter(moviesAdapter);
         moviesGrid.setOnItemClickListener(this);
-
 
         // Referred from https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews
         moviesGrid.setOnScrollListener(new EndlessScrollListener() {
@@ -72,8 +85,6 @@ public class BlockBusterHomeActivityFragment
     @Override
     public void onStart() {
         super.onStart();
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
         String sortOrder = preferences.getString(getString(R.string.sort_pref_key), getString(R.string.default_sort_value));
         if (!sortOrder.equals(prevSortOrder)) {
             Log.d(TAG, "onStart: prevSortOrder: " + prevSortOrder + " Change in Sorting Order: " + !sortOrder.equals(prevSortOrder));
@@ -146,6 +157,7 @@ public class BlockBusterHomeActivityFragment
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            // TODO: 10/9/18 Inject #3
             movieRestService = MovieRestService.getINSTANCE();
         }
 

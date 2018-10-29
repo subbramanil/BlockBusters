@@ -25,6 +25,7 @@ public class MovieRestService {
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
     private static final String TAG = MovieRestService.class.getSimpleName();
     private static MovieRestService INSTANCE;
+    // TODO: 10/9/18 Inject #5
     private Retrofit retrofit;
     private MovieAPIInterface movieAPIInterface;
 
@@ -32,6 +33,7 @@ public class MovieRestService {
         retrofit = createRestService();
     }
 
+    // TODO: 10/9/18 Inject #6
     public static MovieRestService getINSTANCE() {
         if (INSTANCE == null) {
             INSTANCE = new MovieRestService();

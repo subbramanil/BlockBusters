@@ -11,6 +11,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.udacity.learning.blockbusters.AppComponent;
+import com.udacity.learning.blockbusters.BlockbustersApp;
 import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.model.Movie;
 
@@ -24,6 +26,7 @@ import java.util.Objects;
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
     private static final String baseURL = "http://image.tmdb.org/t/p/w500";
+    // TODO: 10/9/18 Inject #4
     private final Context context;
 
     //region Constructors
@@ -31,6 +34,8 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     public MoviesAdapter(Context context, ArrayList<Movie> movies) {
         super(context, 0, movies);
         this.context = context;
+        /*AppComponent appComponent = ((BlockbustersApp) context.getApplication()).getAppComponent();
+        appComponent.inject(this);*/
     }
 
     //endregion
