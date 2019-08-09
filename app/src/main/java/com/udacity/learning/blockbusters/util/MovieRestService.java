@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor;
 import com.udacity.learning.blockbusters.model.MoviesContainer;
 
 import java.io.IOException;
@@ -55,6 +56,7 @@ public class MovieRestService {
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(logging)
+                .addInterceptor(new OkHttpProfilerInterceptor())
                 .build();
 
         retrofit = new Retrofit.Builder()
