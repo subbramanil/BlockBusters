@@ -23,8 +23,15 @@ allprojects {
         maven {
             url 'https://maven.google.com/'
             name 'Google'
-        }
     }
+}
+
+// This block encapsulates custom properties and makes them available to all
+// modules in the project.
+ext {
+    compileSdkVersion = 24
+    buildToolsVersion = "25.0.0"
+    supportLibVersion = "25.3.0"
 }
 
 task clean(type: Delete) {

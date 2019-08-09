@@ -15,7 +15,6 @@ import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.model.Movie;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 /**
@@ -23,6 +22,7 @@ import java.util.Objects;
  */
 public class MoviesAdapter extends ArrayAdapter<Movie> {
 
+    private static final String TAG = MoviesAdapter.class.getSimpleName();
     private static final String baseURL = "http://image.tmdb.org/t/p/w500";
     private final Context context;
 
@@ -40,28 +40,27 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        MovieViewHolder viewHolder;
         Movie movieItem = getItem(position);
 
-        View movieHolderView = convertView;
+        MovieViewHolder viewHolder;
 
-        if (movieHolderView == null) {
+        if (convertView == null) {
             viewHolder = new MovieViewHolder();
-            movieHolderView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
-            viewHolder.movieTitle = movieHolderView.findViewById(R.id.movie_name_text_view);
-            viewHolder.movieImageView = movieHolderView.findViewById(R.id.movie_poster_image_view);
-            viewHolder.movieRatingBar = movieHolderView.findViewById(R.id.movie_rating_bar);
-            movieHolderView.setTag(viewHolder);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent, false);
+            viewHolder.movieTitle = (TextView) convertView.findViewById(R.id.movie_name_textview);
+            viewHolder.movieImageView = (ImageView) convertView.findViewById(R.id.movie_poster_imageview);
+            viewHolder.movieRatingBar = (RatingBar) convertView.findViewById(R.id.movie_ratingbar);
+            convertView.setTag(viewHolder);
         } else {
-            viewHolder = (MovieViewHolder) movieHolderView.getTag();
+            viewHolder = (MovieViewHolder) convertView.getTag();
         }
 
-        viewHolder.movieTitle.setText(Objects.requireNonNull(movieItem).getTitle());
+        viewHolder.movieTitle.setText(movieItem != null ? movieItem.getTitle() : null);
         viewHolder.movieRatingBar.setRating((float) movieItem.getVoteAverage());
         //load movie poster using Picasso Image library
         Picasso.with(context).load(baseURL + movieItem.getPosterPath()).into(viewHolder.movieImageView);
 
-        return movieHolderView;
+        return convertView;
     }
 
     //endregion
@@ -70,9 +69,9 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     //region Classes & Interfaces declaration
 
     private static class MovieViewHolder {
-        private TextView movieTitle;
-        private RatingBar movieRatingBar;
-        private ImageView movieImageView;
+        TextView movieTitle;
+        RatingBar movieRatingBar;
+        ImageView movieImageView;
     }
 
     //endregion

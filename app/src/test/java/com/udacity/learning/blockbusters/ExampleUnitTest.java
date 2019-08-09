@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ExampleUnitTest {
     @Test
-    public void isAdditionCorrect() {
+    public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
 }

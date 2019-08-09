@@ -1,16 +1,37 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url 'http://dl.bintray.com/countly/maven' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.21.6'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven {
+        url 'https://maven.fabric.io/public'
+    }
+}
+
+def apikeysPropertiesFile = rootProject.file("apikeys.properties")
+def apikeysProperties = new Properties()
+apikeysProperties.load(new FileInputStream(apikeysPropertiesFile))
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "23.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.udacity.learning.blockbusters"
         minSdkVersion 19
-        targetSdkVersion 28
-        versionCode 3
-        versionName "1.2"
-        buildConfigField "String", "TMDB_API_KEY", "\"11c530da3a05ed9e5b5eb6163a05e977\""
+        targetSdkVersion 23
+        versionCode 2
+        versionName "1.1"
+        buildConfigField "String", "TMDB_API_KEY", apikeysProperties["TMDB_API_KEY"]
     }
     buildTypes {
         release {
@@ -21,28 +42,54 @@ android {
 
     repositories {
         mavenCentral()
+        jcenter()
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:28.0.0'
-    compile 'com.android.support:design:28.0.0'
-    compile 'com.android.support:cardview-v7:28.0.0'
-    compile 'com.android.support:support-v4:28.0.0'
+
+    // Android Support Libraries
+    compile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:design:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:cardview-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:preference-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:gridlayout-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+
+    // Firebase
+    /*compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile 'com.google.firebase:firebase-core:9.6.1'*/
 
     // To load images easily
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // To Simplify REST API calls
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:okhttp:3.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.0'
 
-    implementation 'com.google.firebase:firebase-core:16.0.4'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+        transitive = true;
+    }
+
+    compile 'com.txusballesteros:bubbles:1.2.1'
+    compile('com.crashlytics.sdk.android:answers:1.3.12@aar') {
+        transitive = true;
+    }
+
+    compile 'com.jakewharton.scalpel:scalpel:1.1.2'
+
+    // Google Sign In
+    compile 'com.google.android.gms:play-services-auth:10.2.1'
 }
 
+// Meant to be put at the bottom; see: http://stackoverflow.com/questions/38834042/version-conflict-updating-to-play-services-9-4-0-android-studio-2-2
 apply plugin: 'com.google.gms.google-services'
