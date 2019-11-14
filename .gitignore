@@ -35,4 +35,6 @@ captures/
 
 *.iml
 app/google-services.json
+apikeys.properties
+app/fabric.properties
 
