@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
     android:layout_margin="@dimen/_5dp"
     android:padding="@dimen/_5dp">
 
@@ -12,12 +12,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/movie_poster_image_view"
+            android:id="@+id/movie_poster_imageview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="@dimen/_5dp"
-            android:contentDescription="@string/poster_background"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -26,13 +25,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/movie_name_text_view"
+                android:id="@+id/movie_name_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lines="1" />
 
             <RatingBar
-                android:id="@+id/movie_rating_bar"
+                android:id="@+id/movie_ratingbar"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

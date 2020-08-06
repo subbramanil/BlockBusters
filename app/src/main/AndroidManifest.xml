@@ -3,12 +3,21 @@
     package="com.udacity.learning.blockbusters">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <permission
+        android:name="com.udacity.learning.blockbusters.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.udacity.learning.blockbusters.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <application
+        android:name=".BlockBustersApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:fullBackupContent="false"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.BlockBusterHomeActivity"
@@ -18,9 +27,6 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity
@@ -40,6 +46,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.udacity.learning.blockbusters.activities.BlockBusterHomeActivity" />
         </activity>
+
+        <!--
+            <service android:name=".fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="63ca42aec0e217a088c8ca946a8cd1c8c5ccf40c" />
+
+        <!--<activity android:name=".activities.GoogleLoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
     </application>
 
 </manifest>

@@ -30,6 +30,7 @@ public class MovieRestService {
 
     private MovieRestService() {
         retrofit = createRestService();
+        Gson gson = new Gson();
     }
 
     public static MovieRestService getINSTANCE() {
@@ -70,16 +71,14 @@ public class MovieRestService {
 
     /**
      * Method to make the Rest API call to the TMDB API service and the list of movies
-     *
-     * @param sortOrder  : Movie Sort order {"Most Popular", "User Rating"}
-     * @param apiKey     : API KEY for TMDB
+     *  @param sortOrder  : Movie Sort order {"Most Popular", "User Rating"}
      * @param pageNumber : Page number
      */
-    public MoviesContainer getMoviesList(String sortOrder, String apiKey, String pageNumber) {
+    public MoviesContainer getMoviesList(String sortOrder, String pageNumber) {
         Log.d(TAG, "getMoviesList: Sort order: " + sortOrder);
 
         MoviesContainer moviesContainer = null;
-        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(sortOrder, apiKey, pageNumber);
+        Call<MoviesContainer> call = movieAPIInterface.fetchMoviesList(sortOrder, com.udacity.learning.blockbusters.BuildConfig.TMDB_API_KEY, pageNumber);
 
         try {
             // Synchronous API Call

@@ -15,7 +15,6 @@ import com.udacity.learning.blockbusters.R;
 import com.udacity.learning.blockbusters.model.Movie;
 
 import java.text.MessageFormat;
-import java.util.Objects;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -27,20 +26,20 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent recdIntent = getIntent();
         Movie movie = recdIntent.getParcelableExtra(SELECTED_MOVIE);
         Log.d(TAG, "onCreate: Selected movie is: " + movie.getTitle());
 
-        CollapsingToolbarLayout collapsibleToolbar = findViewById(R.id.toolbar_layout);
-        ImageView moviePoster = findViewById(R.id.movie_poster_background);
-        TextView movieReleaseDate = findViewById(R.id.movie_releaseDate);
-        TextView movieOverView = findViewById(R.id.movie_overview);
-        RatingBar movieRating = findViewById(R.id.movie_rating);
+        CollapsingToolbarLayout collapsibleToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        ImageView moviePoster = (ImageView) findViewById(R.id.movie_poster_bground);
+        TextView movieReleaseDate = (TextView) findViewById(R.id.movie_releaseDate);
+        TextView movieOverView = (TextView) findViewById(R.id.movie_overview);
+        RatingBar movieRating = (RatingBar) findViewById(R.id.movie_rating);
 
         collapsibleToolbar.setTitle(movie.getTitle());
         // Load Poster using Picasso library
@@ -48,6 +47,5 @@ public class MovieDetailActivity extends AppCompatActivity {
         movieOverView.setText(movie.getOverview());
         movieReleaseDate.setText(MessageFormat.format("Release Date: {0}", movie.getReleaseDate()));
         movieRating.setRating((float) movie.getVoteAverage());
-
     }
 }
